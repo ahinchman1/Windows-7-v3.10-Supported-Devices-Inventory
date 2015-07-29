@@ -6,6 +6,10 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Calendar;
 
@@ -88,26 +92,26 @@ public class RegisterDeviceDialogue extends JDialog{
     	//Type
     	mtype = new JLabel("  Type ");
     	cs.gridx = 0;
-    	cs.gridy = 1;
+    	cs.gridy = 3;
     	cs.gridwidth = 1;
     	panel.add(mtype, cs);
     	
     	jtype = new JTextField(20);
     	cs.gridx = 1;
-    	cs.gridy = 1;
+    	cs.gridy = 3;
     	cs.gridwidth = 1;
     	panel.add(jtype, cs);
     	
     	//Serial number
     	serial = new JLabel("  Serial ");
     	cs.gridx = 0;
-    	cs.gridy = 2;
+    	cs.gridy = 4;
     	cs.gridwidth = 1;
     	panel.add (serial, cs);
     	
     	jserial = new JTextField(20);
     	cs.gridx = 1;
-    	cs.gridy = 2;
+    	cs.gridy = 4;
     	cs.gridwidth = 1;
     	panel.add(jserial, cs);
     	
@@ -117,8 +121,13 @@ public class RegisterDeviceDialogue extends JDialog{
     			
     			if (getBrand() != null && getDesktopLaptop() != null && getMake() != null
     					&& getType() != null && getSerial() != null) {
+    				try {
+						register();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
     				JOptionPane.showMessageDialog(RegisterDeviceDialogue.this, 
-    						getBrand() + " " + getMake() + "has been registered in the Inventory");
+    						getBrand() + " " + getMake() + " has been registered in the Inventory");
     				succeeded = true;
     				dispose();
     			} else {
@@ -177,13 +186,28 @@ public class RegisterDeviceDialogue extends JDialog{
     
     public boolean getSuceeded() {
     	return succeeded;
-    }
+    }// getSuceeded()
     
     public Timestamp getCurrentTime() {
     	Calendar calendar = Calendar.getInstance();
     	Timestamp currentTimestamp = new Timestamp(calendar.getTime().getTime());
 
     	return currentTimestamp;
-    }
+    }// getCurrentTime()
+    
+    public void register() throws IOException {
+    	File file = new File("Inventory.csv");
+    	
+    	FileWriter fw  = new FileWriter(file, true);
+    	BufferedWriter bw = new BufferedWriter(fw);
+    	
+    	String data = getBrand() + "," + getDesktopLaptop() + "," +
+    			getMake() + "," + getTypem() + "," + getSerial() + 
+    			",In";
+    	
+    	bw.write(data);
+    	bw.flush();
+    	bw.close();
+    }// register()
 
 }// class RegisterDeviceDialogue

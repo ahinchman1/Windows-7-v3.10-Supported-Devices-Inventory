@@ -100,8 +100,8 @@ public class Devices {
 	}// toString()
 	
 	public String deviceToString() {
-		return getBrand() + ", " + getDesktopLaptop() + ", " + getMake() +  ", " 
-				+ getType() + ", " + getSerial() + ", " + getStatus();
+		return getBrand() + "," + getDesktopLaptop() + "," + getMake() +  "," 
+				+ getType() + "," + getSerial() + "," + getStatus() + "\n";
 	}
 	
 	  /* findDevice(int)
@@ -305,9 +305,8 @@ public class Devices {
     	  BufferedReader brd = new BufferedReader(new FileReader(file));
     	  
     	  while((line = brd.readLine()) != null) {
-    		  System.out.println("line: " + line);
     		  String newString[] = line.split(splitBy);
-    		  String device[] = newString[5].split("|");
+    		  String device[] = newString[5].split(" ");
     		  String deviceStatus = device[0];
     		  System.out.println(Arrays.toString(newString));
     		  newnew.setBrand(newString[0]);
