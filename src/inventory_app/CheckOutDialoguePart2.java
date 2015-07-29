@@ -197,24 +197,24 @@ public class CheckOutDialoguePart2 extends JDialog {
 		  // go to file to grab contents
 		  File file = new File("temp.txt");
 		  String line = "";
-		  String splitBy = "|";
-		  String splitByAgain = ":";
-		  BufferedReader brd = new BufferedReader(new FileReader(file));
+  	  String splitBy = ":";
+  	  BufferedReader brd = new BufferedReader(new FileReader(file));
   	  
-		  while((line = brd.readLine()) != null) {
-			  System.out.println(line);
-			  String newString[] = line.split(splitByAgain);
-			  String device[] = newString[5].split(splitBy);
-			  newnew.setBrand(newString[0]);
-			  newnew.setDesktopLaptop(newString[1]);
-			  newnew.setType(newString[2]);
-			  newnew.setMake(newString[3]);
-			  newnew.setSerial(newString[4]);
-			  newnew.setStatus(device[0]);
-		  }//while
-		  System.out.println("Device found in file...");
-		  System.out.println("   " + newnew.getDeviceToString());
-		  brd.close();
+  	  while((line = brd.readLine()) != null) {
+  		  String newString[] = line.split(splitBy);
+  		  String device[] = newString[5].split(" ");
+  		  String deviceStatus = device[0];
+  		  System.out.println(Arrays.toString(newString));
+  		  newnew.setBrand(newString[0]);
+  		  newnew.setDesktopLaptop(newString[1]);
+  		  newnew.setType(newString[3]);
+  		  newnew.setMake(newString[2]);
+  		  newnew.setSerial(newString[4]);
+  		  newnew.setStatus(deviceStatus);
+  	  }//while
+  	  System.out.println("Device found in file...");
+  	  System.out.println("   " + newnew.getDeviceToString());
+  	  brd.close();
 		  return newnew;
 	  }// getDevice()
 	  
