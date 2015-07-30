@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +17,7 @@ public class CheckOut {
 	
 	private static final Map<String, CheckOut> CHECKOUT = new HashMap
 			<String, CheckOut>();
+	ArrayList<CheckOut> checkOutList = new ArrayList<CheckOut>();
 	
 	// fields
 	User user;
@@ -170,7 +172,6 @@ public class CheckOut {
 				 
 				 for (int row = 0; row < devices.size(); row++) {
 					 if (deviceMatch(this.getDevice(), devices.get(row))) {
-						 System.out.println("FOUND");
 						 devices.get(row).setStatus("Checked Out");
 						 System.out.println(devices.get(row).deviceToString());
 						 bww.write(devices.get(row).deviceToString());
@@ -209,34 +210,52 @@ public class CheckOut {
 		else return false;
 	}// checkOutMatch(Checkout)
 	
-	public void findAndRemoveCheckout() throws IOException {
-		ArrayList<CheckOut> checkoutList = new ArrayList<CheckOut>();
-		String line = "";
-		String splitBy ="|";
-		File file = new File("Checkout.txt");
-		BufferedReader br = new BufferedReader(new FileReader(file));
-		
-		while ((line = br.readLine()) != null) {
-			String[] object = line.split(splitBy);
-			String user = object[0];
-			String device = object[1];
-			String datetime = object[2];
-			
+    public ArrayList<CheckOut> ReadCheckouts() throws IOException {
+  		String line = "";
+  		String splitBy ="|";
+  		File file = new File("Checkout.txt");
+  		BufferedReader br = new BufferedReader(new FileReader(file));
+  		
+  		while ((line = br.readLine()) != null) {
+  			String[] object = line.split(splitBy);
+  			String user = object[0];
+  			String device = object[1];
+  			String datetime = object[2];
+  			
 
-			CheckOut newCheckOut = new CheckOut(user, device, datetime);
-			checkoutList.add(newCheckOut);
-		}// while 
-		for (int row = 0; row < checkoutList.size(); row++) {
-			if (this.checkoutMatch(checkoutList.get(row))) {
-				checkoutList.remove(checkoutList.get(row));
-			}// if
-		}// for
+  			CheckOut newCheckOut = new CheckOut(user, device, datetime);
+  			checkOutList.add(newCheckOut);
+  		}// while 
+  		// remove checked out item
+  		for (int row = 0; row < checkOutList.size(); row++) {
+  			if (deviceMatch(checkOutList.get(row).getDevice(), gettempdevice())) {
+  				checkOutList.remove(checkOutList.get(row));
+  			}// if
+  		}// for
+  		
+  		br.close();
+  		return checkOutList;
+    }// ReadCSVfile(File)
+    
+  	public Devices gettempdevice() throws IOException {
+		String line = "";
+		String splitBy =":";
+		File file = new File("temp.txt");
+		FileReader filer = new FileReader(file);
+		BufferedReader br = new BufferedReader(filer);
+		Devices newDevice = new Devices();
 		
+		while ((line = br.readLine()) != null) { 
+		String[] object = line.split(splitBy);
+		System.out.println(Arrays.toString(object));
+		String[] status = object[5].split(" ");
+		String stats = status[0] + " " + status[1];
+		newDevice = new Devices(object[0], object[1], object[2],
+					object[3], object[4], stats);
+		}
 		br.close();
-		
-		// NOW REWRITE THE CHECKOUTS FILE
-		
-		// NOW REWRITE THE INVENTORY FILE TO UPDATE DEVICE TO "CHECKED IN"
-	}// findAndRemoveCheckout()
+		return newDevice;
+	}// gettempdevice()
+	
 	
 }// class CheckOut

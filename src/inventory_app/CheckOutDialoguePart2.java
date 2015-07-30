@@ -99,10 +99,8 @@ public class CheckOutDialoguePart2 extends JDialog {
 								getFirstName() + " " + getLastName() + " has checked out a " + getDevice().getDevicegetDevice() +
 								" at " + getCurrentTimeString() + "                ");
 					} catch (HeadlessException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					} catch (IOException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
     				succeeded = true;
@@ -112,7 +110,6 @@ public class CheckOutDialoguePart2 extends JDialog {
 						checkoutfinish = new CheckOut(newUser, getDevice(), newTime);
 						checkoutfinish.writeCheckOut();
 					} catch (IOException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
     				dispose();

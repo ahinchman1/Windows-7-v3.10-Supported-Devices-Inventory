@@ -119,7 +119,6 @@ public class CheckOutDialogue extends JDialog{
                   Devices data = new Devices();
                   try {
                 	// find the selected Device object
-                	//System.out.println(selectedRow);
 					Devices checkoutDevice = data.getDeviceCheckedIn(selectedRow);
 					// now start writing the device to the Java file 
 					checkoutDevice.tempDevice();                                                                                                         

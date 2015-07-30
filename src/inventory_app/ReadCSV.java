@@ -34,6 +34,83 @@ public class ReadCSV {
           return Rs;
       }// ReadCSVfile(File)
       
+      public boolean deviceMatch(Devices one, Devices two) {
+		  System.out.println(one.deviceToString() + " == " + two.deviceToString());
+		  if (one.getBrand().equals(two.getBrand()) &&
+		      one.getDesktopLaptop().equals(two.getDesktopLaptop()) &&
+			  one.getMake().equals(two.getMake()) &&
+			  one.getType().equals(two.getType()) &&
+			  one.getSerial().equals(two.getSerial()) &&
+			  one.getStatus().equals(two.getStatus())) {
+			  return true;
+		  }// if
+		  else return false;
+	  }// deviceMatch(Devices, Devices)
+      
+  	public Devices gettempdevice() throws IOException {
+		String line = "";
+		String splitBy =":";
+		File file = new File("temp.txt");
+		FileReader filer = new FileReader(file);
+		BufferedReader br = new BufferedReader(filer);
+		Devices newDevice = new Devices();
+		
+		while ((line = br.readLine()) != null) { 
+		String[] object = line.split(splitBy);
+		System.out.println(Arrays.toString(object));
+		String[] status = object[5].split(" ");
+		String stats = status[0] + " " + status[1];
+		newDevice = new Devices(object[0], object[1], object[2],
+					object[3], object[4], stats);
+		}
+		br.close();
+		return newDevice;
+	}// gettempdevice()
+      
+      public ArrayList<CheckOut> ReadCheckouts() throws IOException {
+    		String line = "";
+    		String splitBy ="|";
+    		File file = new File("Checkout.txt");
+    		FileReader filr = new FileReader(file);
+    		BufferedReader br = new BufferedReader(filr);
+    		
+    		while ((line = br.readLine()) != null) {
+    			System.out.println(line);
+    			String[] object = line.split(splitBy);
+    			String user = object[0];
+    			String device = object[1];
+    			String datetime = object[2];
+    			
+    			CheckOut newCheckOut = new CheckOut(user, device, datetime);
+    			checkOutList.add(newCheckOut);
+    		}// while 
+    		
+    		// remove checked out item
+    		for (int row = 0; row < checkOutList.size(); row++) {
+    			System.out.println("Checkout: " + checkOutList.get(row));
+    			if (deviceMatch(checkOutList.get(row).getDevice(), gettempdevice())) {
+    				checkOutList.remove(checkOutList.get(row));
+    			}// if
+    		}// for
+    		
+    		br.close();
+    		return checkOutList;
+      }// ReadCSVfile(File)
+      
+      public void writeCheckOuts() throws IOException {
+    	  File newfile = new File("Checkouts.txt");
+    	  
+    	  FileWriter filew = new FileWriter(newfile);
+    	  BufferedWriter bufferedw = new BufferedWriter(filew);
+    	  
+    	  for (int row = 0; row < checkOutList.size(); row++) {
+    		  bufferedw.write(checkOutList.get(row).CheckOutToString());
+    	  }// for 
+    	  bufferedw.flush();
+    	  bufferedw.close();
+    	  
+      }// writeCheckOuts()
+      
       public ArrayList<Devices> ReadCSVfiledevices(File DataFile) throws IOException {
     	  String line = "";
     	  String splitBy = ",";
