@@ -170,7 +170,6 @@ public class CheckInDialogue extends JDialog{
 					string.setStatus("In");
 					
 					//rewrite inventory
-					// Update CheckOut in table
 					 File otherFile = new File("Inventory.csv");
 					 
 					 ReadCSV d = new ReadCSV();
@@ -191,7 +190,10 @@ public class CheckInDialogue extends JDialog{
 					 
 					 bww.flush();
 					 bww.close();
-					
+					 
+					//rewrite checkouts
+					 d.editCheckOuts();
+					 
 					JOptionPane.showMessageDialog(CheckInDialogue.this, 
 							string.getBrand() + " " + string.getMake() + " has been checked back in.            ");
 					dispose();

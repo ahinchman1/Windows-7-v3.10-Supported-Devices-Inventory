@@ -35,6 +35,7 @@ public class Library extends Application {
 	
 	public Library instance;
 	Stage stage;
+	JPanel gui;
 	
 	public Library() throws Exception {
 		instance = this;
@@ -52,7 +53,7 @@ public class Library extends Application {
         frame.setBackground(Color.DARK_GRAY);
         
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        JPanel gui = new JPanel();
+        gui = new JPanel();
         gui.setBackground(Color.DARK_GRAY);
         JTable table = new JTable(new TableModel());
         ReadCSV csv = new ReadCSV();
@@ -143,7 +144,13 @@ public class Library extends Application {
         refreshTable.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+				try {
+					reloadData();
+					table.repaint();
+					tableModel.fireTableDataChanged();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
 			}
         });
         
@@ -181,7 +188,7 @@ public class Library extends Application {
         		if (text.trim().length() == 0) {
         			rowSorter.setRowFilter(null);
         		} else {
-        			rowSorter.setRowFilter(RowFilter.regexFilter(text));
+        			rowSorter.setRowFilter(RowFilter.regexFilter(text.trim()));
         		}
         	}// insertUpdate(DocumentEvent)
         	
@@ -206,11 +213,11 @@ public class Library extends Application {
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // Create and you up the content pane.
-	}
+	}// Library()
 	
 	public Library getInstance() {
 		return instance;
-	}
+	}// getInstance()
 	
 	@Override 
 	public void start(Stage primaryStage) {
@@ -222,7 +229,29 @@ public class Library extends Application {
 			System.out.println("error");
 		}
 	}
-
+	
+	
+	private void reloadData() throws Exception {
+	    //Data.clear();
+	    //int column = getColumnCount();
+        JTable table = new JTable(new TableModel());
+        ReadCSV csv = new ReadCSV();
+		TableModel tableModel = new TableModel();
+		table.setModel(tableModel);
+		File file = new File("Inventory.csv");
+		ArrayList<Devices> devices = csv.ReadCSVfiledevices(file);
+		System.out.println(devices);
+		tableModel.AddCSVData(devices);
+		
+		JScrollPane scrollPane = new JScrollPane(table);
+		gui.add(scrollPane, BorderLayout.CENTER);
+		scrollPane.setBackground(Color.DARK_GRAY);
+		scrollPane.setBorder(new EmptyBorder(10, 10, 10, 10));
+        
+		final TableRowSorter<javax.swing.table.TableModel> rowSorter = 
+				new TableRowSorter<>(table.getModel());
+		table.setRowSorter(rowSorter);
+	}// reloadData()
 	
 	public static void main(String[] args) {
 		launch(args);

@@ -7,8 +7,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
  
 public class ReadCSV {
 	  private final ArrayList<String[]> Rs = new ArrayList<String[]>();
@@ -89,7 +91,7 @@ public class ReadCSV {
     		for (int row = 0; row < checkOutList.size(); row++) {
     			System.out.println("Checkout: " + checkOutList.get(row));
     			if (deviceMatch(checkOutList.get(row).getDevice(), gettempdevice())) {
-    				checkOutList.remove(checkOutList.get(row));
+    				checkOutList.get(row).getDevice().setStatus("Checked In on" + getCurrentTime());;
     			}// if
     		}// for
     		
@@ -97,19 +99,12 @@ public class ReadCSV {
     		return checkOutList;
       }// ReadCSVfile(File)
       
-      public void writeCheckOuts() throws IOException {
-    	  File newfile = new File("Checkouts.txt");
-    	  
-    	  FileWriter filew = new FileWriter(newfile);
-    	  BufferedWriter bufferedw = new BufferedWriter(filew);
-    	  
-    	  for (int row = 0; row < checkOutList.size(); row++) {
-    		  bufferedw.write(checkOutList.get(row).CheckOutToString());
-    	  }// for 
-    	  bufferedw.flush();
-    	  bufferedw.close();
-    	  
-      }// writeCheckOuts()
+      public Timestamp getCurrentTime() {
+      	Calendar calendar = Calendar.getInstance();
+      	Timestamp currentTimestamp = new Timestamp(calendar.getTime().getTime());
+
+      	return currentTimestamp;
+      }
       
       public ArrayList<Devices> ReadCSVfiledevices(File DataFile) throws IOException {
     	  String line = "";
@@ -224,6 +219,26 @@ public class ReadCSV {
     		  e.printStackTrace();
     	  }
       }// addToCheckOuts(File, CheckOut)
+      
+      public void editCheckOuts() throws IOException {
+    	  String line = "";
+    	  File file = new File("Checkout.txt");
+    	  
+    	  //	if the file doesn't exist, then create it
+		  if (!file.exists()) {
+			  file.createNewFile();
+		  }// if
+		  
+    	  
+    	  FileReader fw = new FileReader(file);
+    	  BufferedReader bw = new BufferedReader(fw);
+
+		  System.out.println("Reading Checkout file... ");
+    	  while ((line = bw.readLine()) != null) {
+    		  System.out.println(line);
+    	  }// while
+    	  bw.close();
+      }// editCheckOutSs)
       
 }// class ReadCVS
  

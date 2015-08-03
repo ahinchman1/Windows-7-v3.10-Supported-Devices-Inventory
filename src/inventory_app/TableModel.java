@@ -1,6 +1,9 @@
 package inventory_app;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.swing.JTable;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.event.UndoableEditEvent;
@@ -46,26 +49,6 @@ public class TableModel extends AbstractTableModel implements TableModelListener
      public String getColumnName(int col) {
          return columnNames[col];
      }// getColumnName(int)
-
-     /*@Override
-     public void setValueAt(Object value, int row, int col)
-     {
-    	 
-         if (DEBUG) {
-             System.out.println("Setting value at " + row + "," + col
-                                + " to " + value
-                                + " (an instance of "
-                                + value.getClass() + ")");
-         }
-
-         //Data.set(row, value)[col] = value;
-         fireTableCellUpdated(row, col);
-
-         if (DEBUG) {
-             System.out.println("New value of data:");
-             printDebugData();
-         }
-     }// setValueAt(Object, int, int)*/
      
      @Override
      public void setValueAt(Object value, int row, int column)
@@ -122,11 +105,7 @@ public class TableModel extends AbstractTableModel implements TableModelListener
      
      @Override
      public boolean isCellEditable(int row, int col) {
-    	 if (col == 5) {
-    		 return true;
-    	 } else {
     		 return false;
-    	 }
      }// isCellEditable(int, int)
 
 	@Override
@@ -138,7 +117,5 @@ public class TableModel extends AbstractTableModel implements TableModelListener
         System.out.println("row: " + row + " column: " + column);   
         System.out.println(test.toString());	
 	}// tableChanged(TableModelEvent)
-	
-	
      
-}
+}// class TableModel()
